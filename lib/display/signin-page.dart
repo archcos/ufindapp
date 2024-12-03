@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ufindapp/display/home-page.dart';
 import 'package:ufindapp/services/auth_service.dart';
 
 class SigninPage extends StatefulWidget {
@@ -29,15 +31,20 @@ class _SigninPageState extends State<SigninPage> {
       return;
     }
 
-    final success = await _authService.login(email, password);
+    final loginData = await _authService.login(email, password);
+
     setState(() {
       _isLoading = false;
     });
 
-    if (success) {
+    if (loginData['success']) {
+      // Save the user_id to SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('user_id', loginData['user_id']);
+
       _showMessage('Login successful!');
       // Navigate to the main page or dashboard
-      Navigator.pushReplacementNamed(context, '/mainPage');
+      Navigator.pushReplacementNamed(context, '/homepage');
     } else {
       _showMessage('Invalid email or password. Please try again.');
     }
@@ -110,18 +117,18 @@ class _SigninPageState extends State<SigninPage> {
             _isLoading
                 ? const CircularProgressIndicator(color: Colors.white)
                 : ElevatedButton(
-              onPressed: _login,
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.blue,
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
-              ),
-              child: const Text(
-                'Login',
-                style: TextStyle(fontSize: 16),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(fontSize: 16),
               ),
             ),
             const SizedBox(height: 20),
@@ -134,8 +141,7 @@ class _SigninPageState extends State<SigninPage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Add sign-up navigation logic here
-                    print("Sign up pressed");
+                    Navigator.pushReplacementNamed(context, '/registration');
                   },
                   child: const Text('Sign up', style: TextStyle(color: Colors.white)),
                 ),

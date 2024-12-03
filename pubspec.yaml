@@ -32,7 +32,11 @@ dependencies:
     sdk: flutter
   shared_preferences: ^2.0.15
   http: ^1.0.0 # Add the http package
-
+  crypto: ^3.0.0 # or the latest version available
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.8.0 # Optional, for authentication
+  cloud_firestore: ^5.4.0 # Optional, for Firestore database
+  firebase_storage: ^12.4.0 # Optional, for file storage
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -67,7 +71,9 @@ flutter:
     - assets/images/ss2.png
     - assets/images/ss3.png
     - assets/images/logo.png
-#    - images/a_dot_ham.jpeg
+    - assets/images/profile.jpg
+
+  #    - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
